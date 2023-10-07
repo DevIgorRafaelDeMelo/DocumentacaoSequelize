@@ -1,0 +1,703 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>ORM - NodeJs / MySql</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d05f762f-78fe-4161-9fee-5b16a2c78154" class="page sans"><header><h1 class="page-title">ORM - NodeJs / MySql</h1><p class="page-description"></p><table class="properties"><tbody><tr class="property-row property-row-created_time"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Desenvolvido</th><td><time>@7 de outubro de 2023 16:06</time></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesUrl"><path d="M7.69922 10.8945L8.73828 9.84863C7.91797 9.77344 7.34375 9.51367 6.91992 9.08984C5.76465 7.93457 5.76465 6.29395 6.91309 5.14551L9.18262 2.87598C10.3379 1.7207 11.9717 1.7207 13.127 2.87598C14.2891 4.04492 14.2822 5.67188 13.1338 6.82031L11.958 7.99609C12.1768 8.49512 12.2451 9.10352 12.1289 9.62988L14.0908 7.6748C15.7725 6 15.7793 3.62109 14.084 1.92578C12.3887 0.223633 10.0098 0.237305 8.33496 1.91211L5.95605 4.29785C4.28125 5.97266 4.26758 8.35156 5.96289 10.0469C6.36621 10.4434 6.90625 10.7441 7.69922 10.8945ZM8.30078 5.13184L7.26855 6.17773C8.08203 6.25293 8.66309 6.51953 9.08008 6.93652C10.2422 8.09863 10.2422 9.73242 9.08691 10.8809L6.81738 13.1504C5.66211 14.3057 4.03516 14.3057 2.87305 13.1504C1.71094 11.9883 1.71777 10.3545 2.87305 9.20605L4.04199 8.03027C3.83008 7.53125 3.75488 6.92969 3.87109 6.39648L1.91602 8.35156C0.234375 10.0264 0.227539 12.4121 1.92285 14.1074C3.61816 15.8027 5.99707 15.7891 7.67188 14.1143L10.0439 11.7354C11.7256 10.0537 11.7324 7.6748 10.0371 5.98633C9.64062 5.58301 9.10059 5.28223 8.30078 5.13184Z"></path></svg></span>URL</th><td><a href="https://github.com/DevIgorRafaelDeMelo/MySQL-sequelize" class="url-value">https://github.com/DevIgorRafaelDeMelo/MySQL-sequelize</a></td></tr></tbody></table></header><div class="page-body"><p id="43d9884c-2fd2-48b3-902a-9c4bc64c14a1" class="">Alura - curso avançado em Sequelize </p><p id="4ca632a2-12dc-4acc-aac4-5db78b72e67a" class="">
+</p><h1 id="85170641-e96d-4d09-8750-7e500d3a7390" class="">Descrição do projeto</h1><div><p id="93f0b00f-96a2-4e4c-870a-43d7204ecd49" class="">Esta documentação fornece uma visão geral do curso avançado em ORM, NodeJs e MySql, incluindo sua relação com a missão, objetivos de aprendizado e iniciativa, contexto para a próxima geração e lições aprendidas. O curso ensina como utilizar o Sequelize com Javascript, utilizando a engine do NodeJs para criar um projeto back-end. O foco principal é a manipulação de dados do MySql, utilizando o protocolo do Sequelize. A ideia é criar um back-end para uma escola, onde serão feitos cadastros de estudantes, matrículas, turmas e níveis de graduação, criando as conexões de chaves e definindo os modelos de dados. Também foram utilizados seeds para popular o banco com dados iniciais. Além disso, foram implementadas diversas funcionalidades para manipulação dos dados no banco utilizando sempre o Sequelize.</p></div><p id="79662a05-ad5e-4b7f-928c-7cb82a22c11f" class="">Durante o projeto, foram utilizadas as seguintes ferramentas:</p><ul id="046326d8-8b9b-43c8-8113-956858d3f0c4" class="bulleted-list"><li style="list-style-type:disc">ORM (Object-Relational Mapping) - NodeJs</li></ul><ul id="75648bc3-6ec6-4384-8334-70d617b1eea0" class="bulleted-list"><li style="list-style-type:disc">JavaScript</li></ul><ul id="0fa218fb-354b-4503-a200-15ba9e7f54e4" class="bulleted-list"><li style="list-style-type:disc">Sequelize</li></ul><ul id="b725e1cf-88ab-4c89-baa8-6662c388b970" class="bulleted-list"><li style="list-style-type:disc">MySQL</li></ul><ul id="01cd38ae-4509-4a73-aaa5-215a20a5c43a" class="bulleted-list"><li style="list-style-type:disc">JSON</li></ul><ul id="c7149f0e-6781-4cbf-a2d2-6059b674a561" class="bulleted-list"><li style="list-style-type:disc">Postman</li></ul><ul id="baecc30d-caf3-435c-95cc-073f27377b6d" class="bulleted-list"><li style="list-style-type:disc">Api.rest</li></ul><ul id="6d506213-bc94-439d-883c-d74c36e15842" class="bulleted-list"><li style="list-style-type:disc">Npm</li></ul><p id="a02a8417-55b1-48fb-ada9-686a98f7e62d" class="">
+</p><h1 id="69c8d563-46f9-4472-83c8-22929dab49ce" class="">Documentação do projeto</h1><h3 id="0f033b7a-7d4c-4b81-a4ff-8c12502eefa7" class="">Estrutura do Projeto</h3><p id="69cc3871-2458-4b31-8fb3-eb0ba7e0e93c" class="">
+</p><figure id="453396df-9689-4a18-b7ff-fe1f0eb35248" class="image"><a href="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/EstrututaCursoSeuqelize.png"><img style="width:524px" src="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/EstrututaCursoSeuqelize.png"/></a></figure><p id="6794fcde-5b4f-4246-8b48-3e0189f3f879" class="">
+</p><h2 id="2af25b1f-b6b7-49f9-8df2-14aac5cfa3ab" class="">Instalando projeto</h2><p id="a63c4b35-de5f-49f5-8f88-963fbc2b120c" class="">Iniciando com o comando no terminal.</p><p id="cb27ce7b-37c6-4598-9b5a-883595166412" class="">— npm i  </p><p id="a0a1efa4-51c1-4e68-891d-b1bdc5f6bee0" class="">Vão ser estalados todas as dependências do projeto utilizadas.</p><ul id="d0c2325e-67f1-4c1c-bac0-e87ab03f2459" class="bulleted-list"><li style="list-style-type:disc">Sequelize-cli</li></ul><ul id="3f757d4e-4d09-4bf7-a054-720cb69d333d" class="bulleted-list"><li style="list-style-type:disc">body-parser</li></ul><ul id="ebca59c3-b787-4176-8aff-9cff5e4bc792" class="bulleted-list"><li style="list-style-type:disc">express</li></ul><ul id="2dd463f2-6074-4835-b16e-5c3adc029e8d" class="bulleted-list"><li style="list-style-type:disc">mysql2</li></ul><ul id="a9350624-443c-4072-b777-f5973c87c331" class="bulleted-list"><li style="list-style-type:disc">path</li></ul><ul id="0117c1bf-0c5e-48e9-97c4-3e8baa8f3ffc" class="bulleted-list"><li style="list-style-type:disc">nodemon   </li></ul><p id="5df65c7e-6093-4b56-8b3d-33d5d8b64f90" class="">
+</p><h2 id="b1ea2087-019e-40d5-93f3-048838287ad9" class="">Iniciando o projeto</h2><p id="5cadedd4-f505-4096-a182-98e28d7677eb" class="">Insira o comando no terminal.</p><p id="c0a41770-36aa-4103-98ea-275170ed9b95" class="">— npm run start</p><p id="d68eee35-09b7-4410-9330-4fdf8a2c1949" class="">O servidor local ira iniciar</p><p id="364ad253-c6d5-4ba6-ae18-301d52bb6020" class="">
+</p><figure id="5120df3e-fa98-48ab-a734-e9b793f7afa3" class="image"><a href="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/Capturarstart.png"><img style="width:421px" src="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/Capturarstart.png"/></a></figure><p id="4f77a9c8-cb57-46e3-8802-fde4fdaf2ebc" class="">
+</p><h2 id="5ca328d0-eb4c-41c2-9dc5-2ad3a28e8f6e" class="">Solicitações seguindo o protocolo Rest</h2><p id="b7025689-a4de-402e-8f04-ab158d7d810e" class="">
+</p><p id="98af3763-1a5f-45ad-8a35-f9337ac24934" class="">Par<strong>â</strong>metros e definição de retorno:</p><p id="a35bf24a-59f9-4f88-a993-439650972d17" class="">GET / <a href="http://localhost/">http://localhost</a>/pessoas</p><p id="60928937-06f4-42f7-af48-0bda25cfeed2" class="">Retornara um JSON de todos os registros de pessoas cadastrada no banco, com os seguintes valores.</p><p id="30587e36-91af-4482-8b0d-259100cb58d6" class="">
+</p><figure id="4ef01a0e-8699-42d4-bd64-c65ca0a3d88a" class="image"><a href="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/cadastro.png"><img style="width:336px" src="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/cadastro.png"/></a></figure><p id="c081c1a7-2099-4586-9312-6e7ded0c80f1" class="">
+</p><p id="bf6d1d0b-63d3-42b0-8467-7f2d79e58459" class="">GET / <a href="http://localhost/">http://localhost</a>/pessoas/scopes </p><p id="4ee4b369-251b-4561-a443-1b02c841aefd" class="">Retorna todos os registros de pessoas ativas cadastrada no banco.</p><p id="744f18de-5d4e-427e-869f-3ff3e81add4a" class="">
+</p><figure id="e8c95171-84fb-4ef5-ab5f-31668395cce6" class="image"><a href="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/ativas.png"><img style="width:346px" src="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/ativas.png"/></a></figure><p id="05f91d83-9c06-42f0-85bf-5586d1a94530" class="">
+</p><p id="572e931e-0c3c-4b65-82c6-9efa84477a5b" class="">
+</p><p id="a5e30c51-5a4b-4507-90cc-f61979393ed5" class="">GET / <a href="http://localhost/">http://localhost</a>/pessoas/:id</p><p id="eb112991-d8b4-4578-b9c3-09949f496e9e" class="">Passando o parâmetro ID ele solicitara o elemento pelo seu id</p><p id="ee28b140-5120-4ef4-a30c-7dde154bdc0d" class="">
+</p><figure id="0a96b605-5960-4220-abc9-f7408666310a" class="image"><a href="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/id.png"><img style="width:886px" src="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/id.png"/></a></figure><p id="9ed3e222-16de-4874-8a50-7aeceb6c9f4b" class="">
+</p><p id="768f260d-2fef-4353-aa61-83c0c6975e73" class="">POST / <a href="http://localhost/">http://localhost</a>/pessoas</p><p id="e1c20f81-c459-419d-a5eb-2dc4d3c037a9" class="">Enviando um POST com parâmetros no corpo da solicitação enviando os seguintes dados no formato JSON, isso criara um novo cadastro pessoa.</p><p id="2468b92c-9453-4085-860b-13a53edacaaa" class="">
+</p><figure id="29bf0a65-a272-48f9-a5fd-c1979e3d16a4" class="image"><a href="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/post.png"><img style="width:899px" src="ORM%20-%20NodeJs%20MySql%20d05f762f78fe41619fee5b16a2c78154/post.png"/></a></figure><p id="e7d67742-48fb-4676-b803-e5264004a89b" class="">
+</p><p id="8b012ca2-b6a7-48e1-844d-196682ef5a01" class="">
+</p><p id="61a1420c-20be-4c11-8233-cebb2aeff417" class="">PUT / <a href="http://localhost/">http://localhost</a>/pessoas/:id</p><p id="b673465f-1b58-4964-812b-7a8e4489e8ca" class="">Enviando um PUT com parâmetros no corpo da solicitação enviando os seguintes dados no formato JSON, isso Atualizara os dados cadastrados no id determinado.</p><p id="b73c2ab2-d1ce-43b5-9b47-eaab8cc9b02f" class="">
+</p><p id="a117ebab-fb01-4e67-9de9-59cb1a02d4a9" class="">DELETE / <a href="http://localhost/">http://localhost</a>/pessoas/:id</p><p id="6f194fa4-7261-4283-924b-0573a77ff174" class="">Solicitando DELETE com o parâmetro de id os registro ficarão oculto para próximas solicitações, para melhor manutenção dos registro o sequelize cria uma nova tabela determinando a data da exclusão, esses continuarão no banco porém ocultos,  apenas com uma nova requisição seguida  abaixo pode ser feito essa reversão restaurando o elemento.</p><p id="2d503967-f243-45c7-8e3f-80a2461280e6" class="">POST / <a href="http://localhost/">http://localhost</a>/pessoas/:id/restaura</p><p id="f57e8752-1e45-4a2c-9ce3-0d308627d6f1" class="">Passando o ID determinado ele retorna registros já “excluídos” deixando eles acessíveis. </p><p id="3ebb53ab-8f19-4856-88eb-d608b6d33706" class="">
+</p><p id="034e145a-34b0-4941-83e8-d3c502b0502b" class="">GET / <a href="http://localhost/">http://localhost</a>/pessoas/:id/matricula/:idM</p><p id="770a53ce-326c-4eb9-a1ba-805c338360e4" class="">Esse parâmetro retornara id e matricula determinado.</p><p id="5fc0a599-981d-475f-8a09-de806366ae6d" class="">
+</p><p id="e507c9b5-b671-4ab8-8865-10a90821b92c" class="">GET / <a href="http://localhost/">http://localhost</a>/pessoas/:id/matricula</p><p id="514fd069-707e-495f-8618-d9fdd77818d5" class="">Esse parâmetro retornara todas as matriculas da pessoas determinada .</p><p id="1a77ed00-88da-47e3-99b4-04bfe88e4f1b" class="">
+</p><p id="71e1e312-a69d-424b-af25-374c60c1087c" class="">GET / <a href="http://localhost/">http://localhost</a>/pessoas/matricula/:id/confirmadas</p><p id="d383490c-b174-48e0-842b-8a183a55b2cb" class="">Esse parâmetro retornara a turma determinada pelo ID trazendo todos as Matriculas cadastradas na turma.  </p><p id="cfa62340-5ef7-47ad-88d2-6ce498a0771c" class="">
+</p><p id="7b35d138-1421-425a-9240-52ab50f86331" class="">POST / <a href="http://localhost/">http://localhost</a>/pessoas/:id/matricula</p><p id="24a349e3-186f-4a68-98ca-8ad3999e3bcd" class="">Enviando um POST com parâmetros no corpo da solicitação enviando os seguintes dados no formato JSON, isso criara uma nova Matricula.</p><p id="53b115cd-b1fb-4d89-bf4d-9e23b945573b" class="">
+</p><p id="2fbff74b-e3cd-42af-9aaa-c5e8758a4461" class="">PUT / <a href="http://localhost/">http://localhost</a>/pessoas/:id/matricula/:idM</p><p id="92c1b526-9f22-4eef-977a-c618a4a0f52e" class="">Enviando um PUT com parâmetros de ID e IDM atualizara os dados da matricula do id especifico. </p><p id="0869d029-987c-47c6-b8a3-f1e6b529b7a8" class="">
+</p><p id="1ee5f318-bd5f-4a6d-a5bc-b1a3e299ddd6" class="">DELETE / <a href="http://localhost/">http://localhost</a>/pessoas/:id/matricula/:idM</p><p id="00c99210-4a83-4646-bf32-2810245c2ea3" class="">Solicitando DELETE com o parâmetro de id E IDm os registro ficarão oculto para próximas solicitações, para melhor manutenção dos registro o sequelize cria uma nova tabela determinando a data da exclusão, esses continuarão no banco porém ocultos,  apenas com uma nova requisição seguida  abaixo pode ser feito essa reversão restaurando o elemento.</p><p id="fd9aa628-c192-414b-9bf4-ed64dfef56d0" class="">POST / <a href="http://localhost/">http://localhost</a>/:id/restaura</p><p id="cd1137d0-64a7-49fd-a59e-7d4e1fc41f09" class="">Passando o ID determinado ele retorna registros já “excluídos” deixando eles acessíveis.</p><p id="e362e0b0-fe6a-4919-ab0c-71b478fe3e25" class="">
+</p><p id="ff8dec6e-f349-4ccf-b15d-bc96ba2ccf51" class="">
+</p></div></article></body></html>
